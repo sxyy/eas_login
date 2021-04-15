@@ -5,4 +5,4 @@
 3. 进入到对应的目录下 运行 npm install --registry https://registry.npm.taobao.org
 4. 修改index.js 中的  用户名以及密码。
 5. 将excel表重新保存为csv文件，名字叫做名单保存到项目目录下
-6. 直接运行node index.js 即可
+6. 直接命令行中运行```node index.js``` 即可
