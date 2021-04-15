@@ -12,6 +12,7 @@
     "async": "^3.2.0",
     "cheerio": "^1.0.0-rc.6",
     "csv-parser": "^3.0.0",
+    "csv-writer": "^1.6.0",
     "node-jsencrypt": "^1.0.0",
     "request": "^2.88.2"
   }

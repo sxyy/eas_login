@@ -4,6 +4,7 @@ const async = require('async');
 const encrypt = new JSEncrypt();
 const cheerio = require('cheerio');
 const csv = require('csv-parser');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 var fs = require('fs');
 
 var publicKey = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAN79UcUg0f55hfR2VzpvnYgWVHOgRJd1PEVKE2u9sMsbPWhrndKooXpvL3Fs8JUBRUtn7TLh6Cfr86IM17L7bBsCAwEAAQ==";
@@ -14,7 +15,8 @@ var verifycode = encrypt.encrypt("")
 var myJar = request.jar();
 const HOST_URL = 'https://eas.xhd.cn'
 const results = [];
-
+const notMatchResult = [];
+const matchResult = [];
 
 async.waterfall([
     done => {
@@ -73,8 +75,10 @@ async.waterfall([
                     }, (error, resp, data) => {
                         $ = cheerio.load(data);
                         if ($('#leadsTable tbody tr td').length > 0) {
+                            matchResult.push({"phone": item['1']});
                             console.log(`已匹配到手机号${item['1']}`)
                         } else {
+                            notMatchResult.push({"phone": item['1']});
                             console.log(`未匹配到手机号${item['1']}`);
                         }
                         done1(null)
@@ -85,6 +89,17 @@ async.waterfall([
             })
     }
 ], (err) => {
+    let fileName = `${new Date().valueOf()}.csv`;
+    let csvWriter = createCsvWriter({
+        path: `./${fileName}`,
+        header: [
+            { id: 'phone', title: '手机号' },
+        ]
+    });
+    csvWriter
+        .writeRecords(notMatchResult)
+        .then(() => console.log(`csv文件写入完成,名字为:${fileName}`));
     console.log("执行完成")
+
 })
 
